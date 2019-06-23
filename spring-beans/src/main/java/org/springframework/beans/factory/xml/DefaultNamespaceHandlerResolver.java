@@ -23,13 +23,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
+
+import _03_custom.UserBeanDefinitionParser;
 
 /**
  * Default implementation of the {@link NamespaceHandlerResolver} interface.
@@ -110,11 +111,14 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 	 * @return the located {@link NamespaceHandler}, or {@code null} if none found
 	 */
 	public NamespaceHandler resolve(String namespaceUri) {
+		//将META-INF/spring.handlers中的，以namespace=handler类全限定名转换为map
 		Map<String, Object> handlerMappings = getHandlerMappings();
 		Object handlerOrClassName = handlerMappings.get(namespaceUri);
+		//如果spring.handlers中没有配置
 		if (handlerOrClassName == null) {
 			return null;
 		}
+		//handler还没有被缓存
 		else if (handlerOrClassName instanceof NamespaceHandler) {
 			return (NamespaceHandler) handlerOrClassName;
 		}
@@ -126,8 +130,18 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
 					throw new FatalBeanException("Class [" + className + "] for namespace [" + namespaceUri +
 							"] does not implement the [" + NamespaceHandler.class.getName() + "] interface");
 				}
+				//实例化handler
 				NamespaceHandler namespaceHandler = (NamespaceHandler) BeanUtils.instantiateClass(handlerClass);
+//				public class UserNamespaceHandler extends NamespaceHandlerSupport {
+//					@Override
+//					public void init() {
+//						System.out.println("来了！");
+//						registerBeanDefinitionParser("user", new UserBeanDefinitionParser());
+//					}
+//				}
+				//NamespaceHandler接口中的方法，留给子类实现localname和BeanDefinitionParser的注册
 				namespaceHandler.init();
+				//namespace和对应handler的缓存
 				handlerMappings.put(namespaceUri, namespaceHandler);
 				return namespaceHandler;
 			}

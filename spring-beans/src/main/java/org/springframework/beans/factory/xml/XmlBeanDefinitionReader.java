@@ -580,6 +580,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * Create the default implementation of {@link NamespaceHandlerResolver} used if none is specified.
 	 * Default implementation returns an instance of {@link DefaultNamespaceHandlerResolver}.
 	 */
+	//调用DefaultBeanDefinitionDocumentReader时，初始化DefaultNamespaceHandlerResolver，因为
+	//不同的element可能会有不同的namespace，而每个namespace都需要一个handler去parse，此处的DefaultNamespaceHandlerResolver
+	//会作为一个NamespaceHandler的中转站和解析站，负责将META-INF/spring.handlers中的所有namespace=handler都解析成
+	//map，然后通过namespace得到对应的handler*/
 	protected NamespaceHandlerResolver createDefaultNamespaceHandlerResolver() {
 		return new DefaultNamespaceHandlerResolver(getResourceLoader().getClassLoader());
 	}

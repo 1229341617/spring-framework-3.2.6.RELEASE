@@ -1576,7 +1576,8 @@ public class BeanDefinitionParserDelegate {
 	public BeanDefinition parseCustomElement(Element ele) {
 		return parseCustomElement(ele, null);
 	}
-
+	//根据每个element的namespace，获取到META-INF/spring.schemas中的handler的类全限定名，
+	//并实例化返回，然后调用handler中的解析逻辑
 	public BeanDefinition parseCustomElement(Element ele, BeanDefinition containingBd) {
 		String namespaceUri = getNamespaceURI(ele);
 		NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);
