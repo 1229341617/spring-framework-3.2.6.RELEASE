@@ -407,14 +407,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	}
 
 	//调用BeanPostProcessor后置处理器实例对象初始化之前的处理方法  
+	//spring有一个原则，尽可能在bean实例化之后，调用后处理器的方法
+	//postProcessorAfterInitialization方法，如果返回的bean不为空，就不会走普通bean的实例化路线直接返回
 	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
 			throws BeansException {
 		
 		Object result = existingBean;
 		//遍历容器为所创建的Bean添加的所有BeanPostProcessor后置处理器
 		for (BeanPostProcessor beanProcessor : getBeanPostProcessors()) {
-			//调用Bean实例所有的后置处理中的初始化前处理方法，为Bean实例对象在  
-	        //初始化之前做一些自定义的处理操作
+			//调用Bean实例所有的后置处理中的初始化前处理方法，为Bean实例对象在 初始化之前做一些自定义的处理操作
 			result = beanProcessor.postProcessAfterInitialization(result, beanName);
 			if (result == null) {
 				return result;
@@ -445,9 +446,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		//判断需要创建的Bean是否可以实例化，即是否可以通过当前的类加载器加载
 		resolveBeanClass(mbd, beanName);
 
-		// Prepare method overrides.
-		//校验和准备Bean中的方法覆盖
 		try {
+			// Prepare method overrides.
+			//校验和准备Bean中的方法覆盖
 			mbd.prepareMethodOverrides();
 		}
 		catch (BeanDefinitionValidationException ex) {
@@ -919,6 +920,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @param mbd the bean definition for the bean
 	 * @return the shortcut-determined bean instance, or {@code null} if none
 	 */
+	//实例化的前置处理函数
 	protected Object resolveBeforeInstantiation(String beanName, RootBeanDefinition mbd) {
 		Object bean = null;
 		if (!Boolean.FALSE.equals(mbd.beforeInstantiationResolved)) {
@@ -946,6 +948,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @throws BeansException if any post-processing failed
 	 * @see InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation
 	 */
+	//在bean实例化之前，提供了一个改变bean的机会，或是通过cglib或是通过
+	//jdk动态代理等技术，调用后处理器的方法后，此时bean可能不是原先的bean了
 	protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName)
 			throws BeansException {
 

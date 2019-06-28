@@ -950,6 +950,11 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Checks for existence of a method with the specified name.
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
+	//spring中并没有overrides-method标签，但是此处为什么会对这个处理呢，在解析默认标签时，lookup-method和replaced-method标签都是利用
+	//相应的override对象保存到beandefinition中的，而这两者的override对象在解析时，需要找到对应bean当中的方法，lookup-method需要找到bean
+	//中哪个方法的返回值需要bean属性对应的对象替换，而replaced-method需要找到bean中的哪个方法，它的返回值会被replacer属性对应的bean的reimplemet
+	//方法的返回值所替代，两者都需要找到bean中的哪个方法需要处理，此时如果该bean中的方法被重载，那还需要通过参数列表去判断，此时可以寻找override属性对应的方法
+	//名称在bean中的个数，如果为0肯定就报错，如果为1就不需要去判断方法是众多重载方法中的哪一个，提高性能，如下函数就是实现该功能
 	public void prepareMethodOverrides() throws BeanDefinitionValidationException {
 		// Check that lookup methods exists.
 		MethodOverrides methodOverrides = getMethodOverrides();

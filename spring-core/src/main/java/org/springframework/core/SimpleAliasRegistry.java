@@ -49,7 +49,8 @@ public class SimpleAliasRegistry implements AliasRegistry {
 			this.aliasMap.remove(alias);
 		}
 		else {
-			//如果alias不允许被覆盖则抛出异常
+			//如果当前的别名已经能找到一个bean的名称了，并且该名称和当前bean名称不相等，则报异常，
+			//如果相等，如下map的put最多相同的数据覆盖而已
 			if (!allowAliasOverriding()) {
 				String registeredName = this.aliasMap.get(alias);
 				if (registeredName != null && !registeredName.equals(name)) {
@@ -57,7 +58,12 @@ public class SimpleAliasRegistry implements AliasRegistry {
 							name + "': It is already registered for name '" + registeredName + "'.");
 				}
 			}
-			//当A->B存在时，若再次出现A->C->B时，抛异常
+//			<alias name="2" alias="1"/>
+//			<alias name="3" alias="2"/>
+//			<alias name="4" alias="3"/>
+//			<alias name="5" alias="4"/>
+			//如果以name为alias，一直寻找，如果找到name等于传入的，则报异常
+			//即待注册的name不能出现在当前已有的别名循环引用链中
 			checkForAliasCircle(name, alias);
 			this.aliasMap.put(alias, name);
 		}
@@ -148,6 +154,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * @param name the user-specified name
 	 * @return the transformed name
 	 */
+	//以当前的name作为aliase得到name，重复该操作直到name不能得到alias并返回该name
 	public String canonicalName(String name) {
 		String canonicalName = name;
 		// Handle aliasing...

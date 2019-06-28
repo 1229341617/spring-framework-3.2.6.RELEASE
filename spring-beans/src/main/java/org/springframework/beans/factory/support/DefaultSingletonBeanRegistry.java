@@ -164,26 +164,27 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 	public Object getSingleton(String beanName) {
+		//true标识允许使用早期依赖
 		return getSingleton(beanName, true);
 	}
-
-	/**
-	 * Return the (raw) singleton object registered under the given name.
-	 * <p>Checks already instantiated singletons and also allows for an early
-	 * reference to a currently created singleton (resolving a circular reference).
-	 * @param beanName the name of the bean to look for
-	 * @param allowEarlyReference whether early references should be created or not
-	 * @return the registered singleton object, or {@code null} if none found
-	 */
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+		//尝试从单例对象缓存中，根据bean的name获取单例对象
 		Object singletonObject = this.singletonObjects.get(beanName);
+		//若获取bean为空，但是该name的bean为空是因为当前正在创建，则进一步处理
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
 			synchronized (this.singletonObjects) {
+				//尝试从早期单例对象缓存中获取，如果获取成功直接返回，如果缓存中不存在早期引用
+				//且允许使用早期依赖，则到ObjectFactory中寻找earlySingletonObjects
+				//和singtonObjects最大的不同在于，当一个bean被放入里面之后，当该bean还没有被创建完成，就可以访问到，目的是解决循环依赖的问题
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				if (singletonObject == null && allowEarlyReference) {
+					//根据name找到单例工厂，如果工厂存在则获取单例对象，并添加到早期单例对象缓存中
+					//当某些方法需要提前初始化时，会调用addSingleton方法，将对应的ObjectFactory初始化策略存储在singletonFactories中
+					//当然此时如果直接去调用该方法时，会将加载bean时的一些辅助状态全部清空
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
 						singletonObject = singletonFactory.getObject();
+						//earlySingletonObjects和singletonFactories互斥
 						this.earlySingletonObjects.put(beanName, singletonObject);
 						this.singletonFactories.remove(beanName);
 					}
@@ -204,7 +205,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(beanName, "'beanName' must not be null");
 		synchronized (this.singletonObjects) {
+			//创建单例对象，第一步就是查看缓存中是否已经含有已创建好的，这是维持单例所必要的
 			Object singletonObject = this.singletonObjects.get(beanName);
+			//如果未创建，才允许单例bean的初始化
 			if (singletonObject == null) {
 				if (this.singletonsCurrentlyInDestruction) {
 					throw new BeanCreationNotAllowedException(beanName,
@@ -214,12 +217,14 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
+				//记录当前beanName为当前正在创建的状态，方便对于循环依赖进行检测，初始获取singleton方法中的判断依据之一
 				beforeSingletonCreation(beanName);
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
 				if (recordSuppressedExceptions) {
 					this.suppressedExceptions = new LinkedHashSet<Exception>();
 				}
 				try {
+					//初始化bean
 					singletonObject = singletonFactory.getObject();
 				}
 				catch (BeanCreationException ex) {
@@ -234,8 +239,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					if (recordSuppressedExceptions) {
 						this.suppressedExceptions = null;
 					}
+					//和before相对应，此时单例bean创建完成，需要移除正在创建的状态
 					afterSingletonCreation(beanName);
 				}
+				//将创建好的单例bean加入到缓存中，并删除加载bean过程当中的各种辅助状态
 				addSingleton(beanName, singletonObject);
 			}
 			return (singletonObject != NULL_OBJECT ? singletonObject : null);
@@ -386,23 +393,17 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	//为指定的Bean注入依赖的Bean
 	public void registerDependentBean(String beanName, String dependentBeanName) {
-		//处理Bean名称，将别名转换为规范的Bean名称  
 		String canonicalName = canonicalName(beanName);
-		//多线程同步，保证容器内数据的一致性  
-	    //先从容器中：bean名称-->全部依赖Bean名称集合找查找给定名称Bean的依赖Bean
 		synchronized (this.dependentBeanMap) {
-			//获取给定名称Bean的所有依赖Bean名称  
+			//获取给定名称Bean的所有依赖Bean名称，并将当前依赖beanName的名称添加到set中
 			Set<String> dependentBeans = this.dependentBeanMap.get(canonicalName);
 			if (dependentBeans == null) {
-				//为Bean设置依赖Bean信息
 				dependentBeans = new LinkedHashSet<String>(8);
 				this.dependentBeanMap.put(canonicalName, dependentBeans);
 			}
-			//向容器中：bean名称-->全部依赖Bean名称集合添加Bean的依赖信息  
-	        //即，将Bean所依赖的Bean添加到容器的集合中 
 			dependentBeans.add(dependentBeanName);
 		}
-		//从容器中：bean名称-->指定名称Bean的依赖Bean集合找查找给定名称Bean的依赖Bean
+		//从容器中：bean名称-->指定名称Bean的依赖Bean集合中，查找给定名称Bean的依赖Bean
 		synchronized (this.dependenciesForBeanMap) {
 			Set<String> dependenciesForBean = this.dependenciesForBeanMap.get(dependentBeanName);
 			if (dependenciesForBean == null) {
