@@ -99,6 +99,7 @@ abstract class AutowireUtils {
 	 * @param pd the PropertyDescriptor of the bean property
 	 * @return whether the bean property is excluded
 	 */
+	//判断当前属性是否需要被自动装配
 	public static boolean isExcludedFromDependencyCheck(PropertyDescriptor pd) {
 		Method wm = pd.getWriteMethod();
 		if (wm == null) {
@@ -106,10 +107,15 @@ abstract class AutowireUtils {
 		}
 		if (!wm.getDeclaringClass().getName().contains("$$")) {
 			// Not a CGLIB method so it's OK.
+			//cglib产生的新的属性不会被纳入到自动装配属性集合中
+			//如果当前属性的setter方法不是一个cglib方法，这就表示当前属性的setter方法是这个属性自己的，
+			//不是cglib动态代理产生的，那当然不会排除对它的自动装配
 			return false;
 		}
 		// It was declared by CGLIB, but we might still want to autowire it
 		// if it was actually declared by the superclass.
+		//来到这里，当前属性的setter方法就为动态代理类中的方法了，是代理类（子类）覆盖或者新增的，如果是覆盖那
+		//表示子类（最原始的类）中是有该属性的setter方法的，如果是在代理类中才出现的，那就不行了，如下就是判断
 		Class<?> superclass = wm.getDeclaringClass().getSuperclass();
 		return !ClassUtils.hasMethod(superclass, wm.getName(), wm.getParameterTypes());
 	}

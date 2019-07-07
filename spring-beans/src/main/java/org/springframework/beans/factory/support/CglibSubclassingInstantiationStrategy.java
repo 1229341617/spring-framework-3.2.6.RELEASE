@@ -68,20 +68,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		// Must generate CGLIB subclass.
 		return new CglibSubclassCreator(beanDefinition, owner).instantiate(null, null);
 	}
-
-	@Override
-	protected Object instantiateWithMethodInjection(
-			RootBeanDefinition beanDefinition, String beanName, BeanFactory owner,
-			Constructor ctor, Object[] args) {
-
-		return new CglibSubclassCreator(beanDefinition, owner).instantiate(ctor, args);
-	}
-
-
-	/**
-	 * An inner class created for historical reasons to avoid external CGLIB dependency
-	 * in Spring versions earlier than 3.2.
-	 */
+	
 	private static class CglibSubclassCreator {
 
 		private static final Log logger = LogFactory.getLog(CglibSubclassCreator.class);
@@ -94,19 +81,8 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			this.beanDefinition = beanDefinition;
 			this.owner = owner;
 		}
-
-		/**
-		 * Create a new instance of a dynamically generated subclasses implementing the
-		 * required lookups.
-		 * @param ctor constructor to use. If this is {@code null}, use the
-		 * no-arg constructor (no parameterization, or Setter Injection)
-		 * @param args arguments to use for the constructor.
-		 * Ignored if the ctor parameter is {@code null}.
-		 * @return new instance of the dynamically generated class
-		 */
 		//使用CGLIB进行Bean对象实例化
 		public Object instantiate(Constructor ctor, Object[] args) {
-			//CGLIB中的类
 			Enhancer enhancer = new Enhancer();
 			//将Bean本身作为其基类
 			enhancer.setSuperclass(this.beanDefinition.getBeanClass());
@@ -116,7 +92,6 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 					new LookupOverrideMethodInterceptor(),
 					new ReplaceOverrideMethodInterceptor()
 			});
-
 			//使用CGLIB的create方法生成实例对象
 			return (ctor == null) ?
 					enhancer.create() :
