@@ -108,6 +108,7 @@ public class CustomEditorConfigurer implements BeanFactoryPostProcessor, BeanCla
 
 	private PropertyEditorRegistrar[] propertyEditorRegistrars;
 
+	//key为需要解析的数据类型，value为解析对应key类型的解析器
 	private Map<String, ?> customEditors;
 
 	private boolean ignoreUnresolvableEditors = false;

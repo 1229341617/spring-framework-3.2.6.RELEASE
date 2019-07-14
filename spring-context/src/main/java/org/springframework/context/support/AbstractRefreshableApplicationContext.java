@@ -127,13 +127,13 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 		try {
 			//创建IOC容器
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
+			//为了序列化指定id，如果需要的话，让这个BeanFactory从id反序列化到BeanFactory对象
 			beanFactory.setSerializationId(getId());
-			//对IOC容器进行定制化，如设置启动参数，开启注解的自动装配
-			//初始化是否可以beandefinitions覆盖和循环依赖的参数初始化设置
+			//对IOC容器进行定制化，如设置启动参数，开启注解的自动装配、初始化是否可以beandefinitions覆盖和循环依赖的参数初始化设置
 			customizeBeanFactory(beanFactory);
-			//这里又使用了一个继承式的委派模式，在当前类中定义抽象的loadBeanDefinitions方法并调用，
-			//因为是加载BeanDefinitions，所以应该在父类AbstractXmlApplicationContext
-			//中实现加载逻辑
+			//这里又使用了一个继承式的委派模式，在当前类中定义抽象的loadBeanDefinitions方法并调用，因为是加
+			//载BeanDefinitions，所以应该在父类AbstractXmlApplicationContext中实现加载逻辑，
+			//此处开始，像分析XmlBeanFactory最开始将this传入XmlBeanDefinitionReader一样传入beanFactory构建
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
@@ -216,12 +216,16 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 * @see DefaultListableBeanFactory#setAllowEagerClassLoading
 	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
+		//是否允许覆盖同名称、但不同定义的对象
 		if (this.allowBeanDefinitionOverriding != null) {
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
+		//是否允许bean之间存在循环依赖
 		if (this.allowCircularReferences != null) {
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}
+		//在创建bean时，分析过，使用autowireType方式注入，默认会使用Spring提供的SimpleAutowireCandidateResolver，而
+		//在此处Spring使用了QualifierAnnotationAutowireCandidateResolver，设置了这个解析器后Spring就可以支持注解方式注入了
 		beanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
 	}
 

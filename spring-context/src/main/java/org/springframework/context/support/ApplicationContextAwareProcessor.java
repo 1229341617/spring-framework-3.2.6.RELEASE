@@ -95,6 +95,11 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 		return bean;
 	}
 
+	public Object postProcessAfterInitialization(Object bean, String beanName) {
+		return bean;
+	}
+
+
 	private void invokeAwareInterfaces(Object bean) {
 		if (bean instanceof Aware) {
 			if (bean instanceof EnvironmentAware) {
@@ -117,10 +122,6 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 				((ApplicationContextAware) bean).setApplicationContext(this.applicationContext);
 			}
 		}
-	}
-
-	public Object postProcessAfterInitialization(Object bean, String beanName) {
-		return bean;
 	}
 
 
