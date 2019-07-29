@@ -933,11 +933,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void registerListeners() {
 		// Register statically specified listeners first.
+		//对硬编码方式注册的监听器处理
 		for (ApplicationListener<?> listener : getApplicationListeners()) {
 			getApplicationEventMulticaster().addApplicationListener(listener);
 		}
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let post-processors apply to them!
+		//配置文件注册的监听器处理
 		String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
 		for (String lisName : listenerBeanNames) {
 			getApplicationEventMulticaster().addApplicationListenerBean(lisName);
@@ -984,7 +986,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.setTempClassLoader(null);
 
 		// Allow for caching all bean definition metadata, not expecting further changes.
-		//缓存容器中所有注册的BeanDefinition元数据，以防被修改
+		//冻结缓存容器中所有注册的BeanDefinition元数据，以防被修改
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
@@ -997,6 +999,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * onRefresh() method and publishing the
 	 * {@link org.springframework.context.event.ContextRefreshedEvent}.
 	 */
+	//初始化容器的生命周期事件处理器，并发布容器的生命周期事件
 	protected void finishRefresh() {
 		// Initialize lifecycle processor for this context.
 		initLifecycleProcessor();

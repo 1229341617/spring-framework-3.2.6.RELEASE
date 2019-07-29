@@ -574,8 +574,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	public void freezeConfiguration() {
+		//设置已冻结标记
 		this.configurationFrozen = true;
 		synchronized (this.beanDefinitionMap) {
+			//将当前已经加载的beandefinition的名称全都加载到冻结缓存中
 			this.frozenBeanDefinitionNames = StringUtils.toStringArray(this.beanDefinitionNames);
 		}
 	}
@@ -602,8 +604,6 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		List<String> beanNames;
 		//在对配置lazy-init属性单态Bean的预实例化过程中，必须多线程同步，以确保数据一致性
 		synchronized (this.beanDefinitionMap) {
-			// Iterate over a copy to allow for init methods which in turn register new bean definitions.
-			// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
 			beanNames = new ArrayList<String>(this.beanDefinitionNames);
 		}
 		for (String beanName : beanNames) {
@@ -613,9 +613,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				//如果指定名称的bean是创建容器的Bean
 				if (isFactoryBean(beanName)) {
-					//FACTORY_BEAN_PREFIX=”&”，当Bean名称前面加”&”符号  
-	                //时，获取的是产生容器对象本身，而不是容器产生的Bean.  
-	                //调用getBean方法，触发容器对Bean实例化和依赖注入过程  
+					//FACTORY_BEAN_PREFIX=”&”，当Bean名称前面加”&”符号时，获取的是产生容器对象
+					//本身，而不是容器产生的Bean.调用getBean方法，触发容器对Bean实例化和依赖注入过程  
 					final FactoryBean<?> factory = (FactoryBean<?>) getBean(FACTORY_BEAN_PREFIX + beanName);
 					//标识是否需要预实例化  
 					boolean isEagerInit;

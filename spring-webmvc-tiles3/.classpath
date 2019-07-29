@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="output" path="spring-webmvc-tiles3/bin/eclipse"/>
+	<classpathentry output="bin/main" kind="src" path="src/main/java"/>
+	<classpathentry output="bin/test" kind="src" path="src/test/java"/>
+	<classpathentry output="bin/test" kind="src" path="src/test/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry kind="src" path="/spring-context" exported="true"/>
+	<classpathentry kind="src" path="/spring-web" exported="true"/>
+	<classpathentry kind="src" path="/spring-webmvc" exported="true"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-request-api/1.0.1/jar/ac444f7d599a6ae28c360cd10fdf2aafa3b87106/tiles-request-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-api/3.0.1/jar/3d49cebe1adfb2074332ccb16eb9cfe7647e1759/tiles-api-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-core/3.0.1/jar/359a3c7f0155f03ae5d12d2f779859a453c437bf/tiles-core-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-servlet/3.0.1/jar/4ec5bed5f984ac1ed54bec1cbb0e51c1cb4e3dad/tiles-servlet-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-jsp/3.0.1/jar/3554582e83bd84bcce601b935440ff281d1d210f/tiles-jsp-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-extras/3.0.1/jar/2b959bcc00256131e6f9c8b44da0e8937cb1b8ac/tiles-extras-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-el/3.0.1/jar/e3454acc31fcb2705e7c82cffe69b9b14a9dde46/tiles-el-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.el/el-api/1.0/jar/df8c6ce0406676e70c5d018e5fb988be1bcf1024/el-api-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.servlet/jstl/1.2/jar/74aca283cd4f4b4f3e425f5820cda58f44409547/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.servlet.jsp/jsp-api/2.1/jar/63f943103f250ef1f3a4d5e94d145a0f961f5316/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.servlet/javax.servlet-api/3.0.1/jar/6bf0ebb7efd993e222fc1112377b5e92a13b38dd/javax.servlet-api-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/junit/junit/4.11/jar/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-all/1.3/jar/63a21ebc981131004ad02e0434e799fd7f3a8d5a/hamcrest-all-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.mockito/mockito-core/1.9.5/jar/c3264abeea62c4d2f367e21484fbb40c7e256393/mockito-core-1.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.slf4j/slf4j-jcl/1.6.1/jar/b5902b1ba8ec58a96140bb7445037b3512cc99bb/slf4j-jcl-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/commons-beanutils/commons-beanutils/1.8.0/jar/c651d5103c649c12b20d53731643e5fffceb536/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/commons-digester/commons-digester/2.0/jar/3dbd8a76683cd563583a2c78c356ad8b8acf38bf/commons-digester-2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-request-servlet/1.0.1/jar/b74ca6c9c9eedfcaf1b8e9a8889d0dcf615df33d/tiles-request-servlet-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-autotag-core-runtime/1.1.0/jar/1fb6109d5bc35c7403a55d019e0e8cf8ec06b49e/tiles-autotag-core-runtime-1.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-template/3.0.1/jar/e9ab8acfa97bc812a71334394d1f573b25b5aebe/tiles-template-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-request-jsp/1.0.1/jar/ad5fa55a948087e67593adbff312206d07033c08/tiles-request-jsp-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/commons-logging/commons-logging/1.1.1/jar/5043bfebc3db072ed80fbd362e7caf00e885d8ae/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/aopalliance/aopalliance/1.0/jar/235ba8b489512805ac13a8f9ea77a1ca5ebe3e8/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-request-servlet-wildcard/1.0.1/jar/b84cc2ad3647ec2c4e172803719277e74bde4b3f/tiles-request-servlet-wildcard-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.codehaus.jackson/jackson-core-asl/1.5.2/jar/d31b0bc93ebc95c6aa0cdb1b044701ba17429d78/jackson-core-asl-1.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.codehaus.jackson/jackson-mapper-asl/1.5.2/jar/5d242931f6a8baa486ef8646ec8476cf6a14b50/jackson-mapper-asl-1.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/com.google.guava/guava/r09/jar/9c8991d491d714053d300de0f8657d95780ff923/guava-r09.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/com.github.spullara.mustache.java/core/0.6.2/jar/88ee806dd40a1e836d3dc1ac6ba8487ccd0ac693/core-0.6.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/com.github.spullara.mustache.java/builder/0.6.2/jar/79a18555b1948b81bc94fe570f8d8a3c6fe2966c/builder-0.6.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-request-mustache/1.0.1/jar/4fff86a848e8a10d0e59c2058dad1aba07c21c2e/tiles-request-mustache-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.freemarker/freemarker/2.3.15/jar/c8cfe522476fcec8da5c980d58bf62d6ab0cf27c/freemarker-2.3.15.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-request-freemarker/1.0.1/jar/9b5709d70ac5c80586fdbb6ddf11577d97492582/tiles-request-freemarker-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-freemarker/3.0.1/jar/a452de79623f48bbd642073424faa9e46eed2c79/tiles-freemarker-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/oro/oro/2.0.8/jar/5592374f834645c4ae250f4c9fbb314c9369d698/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/commons-lang/commons-lang/2.4/jar/16313e02a793435009f1e458fa4af5d879f6fb11/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/commons-collections/commons-collections/3.2.1/jar/761ea405b9b37ced573d2df0d1e3a4e0f9edc668/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.velocity/velocity/1.6.2/jar/1b470ec12a9b8aa69b0458a7e477dacb2cbdd6a0/velocity-1.6.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.velocity/velocity-tools/2.0/jar/69936384de86857018b023a8c56ae0635c56b6a0/velocity-tools-2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-request-velocity/1.0.1/jar/5b1532240d5a69244c468e38c89158caff29f3ce/tiles-request-velocity-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-velocity/3.0.1/jar/3ff74e88c4a6fe4e70e89492acf0c2c235659eac/tiles-velocity-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.mvel/mvel2/2.0.11/jar/14bb21dabd899d2e60d9c0d008f267ed0d6c9ea8/mvel2-2.0.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-mvel/3.0.1/jar/582c704beb37b6be8370e5f068f92f5c1afd1814/tiles-mvel-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/jboss/javassist/3.7.ga/jar/6d271a67a1d8718bfb225ace5a25f1c09427c9f8/javassist-3.7.ga.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/ognl/ognl/2.7.3/jar/8c391fdc943b352045bd35c4f57306ccc6442f7c/ognl-2.7.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-ognl/3.0.1/jar/8388c282fa8e0013814cd2bba43e5cf3bcde23f0/tiles-ognl-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.tiles/tiles-compat/3.0.1/jar/c740c6ab329bacaae02863723280eadead778edc/tiles-compat-3.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-core/1.3/jar/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.objenesis/objenesis/1.0/jar/9b473564e792c2bdf1449da1f0b1b5bff9805704/objenesis-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.slf4j/slf4j-api/1.6.1/jar/6f3b8a24bf970f17289b234284c94f43eb42f0e4/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="src" path="/spring-aop" exported="true"/>
+	<classpathentry kind="src" path="/spring-core" exported="true"/>
+	<classpathentry kind="src" path="/spring-beans" exported="true"/>
+	<classpathentry kind="src" path="/spring-expression" exported="true"/>
+	<classpathentry kind="src" path="/spring-instrument" exported="true"/>
+	<classpathentry kind="src" path="/spring-oxm" exported="true"/>
+	<classpathentry kind="src" path="/spring-context-support" exported="true"/>
+	<classpathentry kind="src" path="/spring-jdbc" exported="true"/>
+	<classpathentry kind="src" path="/spring-tx" exported="true"/>
+</classpath>

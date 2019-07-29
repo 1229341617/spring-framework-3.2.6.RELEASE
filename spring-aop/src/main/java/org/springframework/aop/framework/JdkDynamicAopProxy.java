@@ -157,14 +157,18 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 		Object target = null;
 
 		try {
+			//equals方法的处理
 			if (!this.equalsDefined && AopUtils.isEqualsMethod(method)) {
 				// The target does not implement the equals(Object) method itself.
 				return equals(args[0]);
 			}
+			//hashCode方法的处理
 			if (!this.hashCodeDefined && AopUtils.isHashCodeMethod(method)) {
 				// The target does not implement the hashCode() method itself.
 				return hashCode();
 			}
+			//class.isAssignableFrom(自身类或子类.class)，则返回true
+			//如果当前被代理的方法来自接口，并且该接口继承了Advised
 			if (!this.advised.opaque && method.getDeclaringClass().isInterface() &&
 					method.getDeclaringClass().isAssignableFrom(Advised.class)) {
 				// Service invocations on ProxyConfig with the proxy config...
@@ -172,7 +176,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			}
 
 			Object retVal;
-
+			//之前分析过，当目标对象的方法自我调用时，将无法实施切面中的增强，需要通过此属性暴露代理
 			if (this.advised.exposeProxy) {
 				// Make invocation available if necessary.
 				oldProxy = AopContext.setCurrentProxy(proxy);
@@ -187,6 +191,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 			}
 
 			// Get the interception chain for this method.
+			//获取当前方法的拦截器链
 			List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 
 			// Check whether we have any advice. If we don't, we can fallback on direct
@@ -195,17 +200,21 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 				// We can skip creating a MethodInvocation: just invoke the target directly
 				// Note that the final invoker must be an InvokerInterceptor so we know it does
 				// nothing but a reflective operation on the target, and no hot swapping or fancy proxying.
+				//如果没有发现任何拦截器，直接调用切点方法
 				retVal = AopUtils.invokeJoinpointUsingReflection(target, method, args);
 			}
 			else {
 				// We need to create a method invocation...
+				//将拦截器封装到ReflectiveMethodInvocation中，以便于使用它的proceed进行拦截器链的顺序调用
 				invocation = new ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);
 				// Proceed to the joinpoint through the interceptor chain.
+				//执行拦截器链
 				retVal = invocation.proceed();
 			}
 
 			// Massage return value if necessary.
 			Class<?> returnType = method.getReturnType();
+			//返回结果
 			if (retVal != null && retVal == target && returnType.isInstance(proxy) &&
 					!RawTargetAccess.class.isAssignableFrom(method.getDeclaringClass())) {
 				// Special case: it returned "this" and the return type of the method

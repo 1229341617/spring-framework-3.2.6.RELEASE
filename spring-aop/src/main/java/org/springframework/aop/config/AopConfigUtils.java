@@ -107,9 +107,13 @@ public abstract class AopConfigUtils {
 
 	private static BeanDefinition registerOrEscalateApcAsRequired(Class cls, BeanDefinitionRegistry registry, Object source) {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
+		//如果当前的自动代理创建器已存在
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
+			//得到当前的自动代理创建器的BeanDefinition
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
+			//如果已经注册的自动代理创建器的名称和AnnotationAwareAspectJAutoProxyCreator不一样
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {
+				//如果已经注册的创建器的优先级更小，类全限定名就要设置成参数中的cls.getName
 				int currentPriority = findPriorityForClass(apcDefinition.getBeanClassName());
 				int requiredPriority = findPriorityForClass(cls);
 				if (currentPriority < requiredPriority) {
@@ -118,6 +122,7 @@ public abstract class AopConfigUtils {
 			}
 			return null;
 		}
+		//如果还没有注册，当然就不需要用优先级判断再替换，直接用参数传进来的cls封装beandefinition即可
 		RootBeanDefinition beanDefinition = new RootBeanDefinition(cls);
 		beanDefinition.setSource(source);
 		beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE);

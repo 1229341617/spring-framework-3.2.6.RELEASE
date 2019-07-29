@@ -17,7 +17,6 @@
 package org.springframework.context.config;
 
 import org.w3c.dom.Element;
-
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -60,12 +59,12 @@ class LoadTimeWeaverBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 		return ConfigurableApplicationContext.LOAD_TIME_WEAVER_BEAN_NAME;
 	}
 
-	@Override
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
 		builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-
+		//是否开启aspectj,ASPECTJ_WEAVING_ATTRIBUTE="aspectj-weaving"
 		if (isAspectJWeavingEnabled(element.getAttribute(ASPECTJ_WEAVING_ATTRIBUTE), parserContext)) {
 			RootBeanDefinition weavingEnablerDef = new RootBeanDefinition();
+			//ASPECTJ_WEAVING_ENABLER_CLASS_NAME="org.springframework.context.weaving.AspectJWeavingEnabler"
 			weavingEnablerDef.setBeanClassName(ASPECTJ_WEAVING_ENABLER_CLASS_NAME);
 			parserContext.getReaderContext().registerWithGeneratedName(weavingEnablerDef);
 
@@ -74,7 +73,15 @@ class LoadTimeWeaverBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 			}
 		}
 	}
-
+	/**
+	 * 是否开启aspectj
+	 * 		     标签<context:load-time-weaver/>其实有一个属性aspectj-weaving，它有三种属性值，
+	 * 		分别是on、off和autodetect，默认为autodetect，为自动探测，探测的目标就是/META-INF
+	 * 		目录中是否存在aop.xml文件;
+	 * @param value
+	 * @param parserContext
+	 * @return
+	 */
 	protected boolean isAspectJWeavingEnabled(String value, ParserContext parserContext) {
 		if ("on".equals(value)) {
 			return true;
@@ -83,8 +90,9 @@ class LoadTimeWeaverBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 			return false;
 		}
 		else {
-			// Determine default...
 			ClassLoader cl = parserContext.getReaderContext().getResourceLoader().getClassLoader();
+			//如果aspectj-weaving值为autodetect或者未设置，则 判断/META-INF目录下是否有aop.xml文件
+			//public static final String ASPECTJ_AOP_XML_RESOURCE = "META-INF/aop.xml";
 			return (cl.getResource(AspectJWeavingEnabler.ASPECTJ_AOP_XML_RESOURCE) != null);
 		}
 	}

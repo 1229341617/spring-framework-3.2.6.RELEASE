@@ -109,17 +109,6 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 		this.running = true;
 	}
 
-	public void onClose() {
-		stopBeans();
-		this.running = false;
-	}
-
-	public boolean isRunning() {
-		return this.running;
-	}
-
-
-	// internal helpers
 
 	private void startBeans(boolean autoStartupOnly) {
 		Map<String, Lifecycle> lifecycleBeans = getLifecycleBeans();

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="output" path="spring-tx/bin/eclipse"/>
+	<classpathentry output="bin/main" kind="src" path="src/main/java"/>
+	<classpathentry output="bin/main" kind="src" path="src/main/resources"/>
+	<classpathentry output="bin/test" kind="src" path="src/test/java"/>
+	<classpathentry output="bin/test" kind="src" path="src/test/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry kind="src" path="/spring-beans" exported="true"/>
+	<classpathentry kind="src" path="/spring-core" exported="true"/>
+	<classpathentry kind="src" path="/spring-context" exported="true"/>
+	<classpathentry kind="src" path="/spring-aop" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/aopalliance/aopalliance/1.0/source/4a4b6d692e17846a9f3da036438a7ac491d3c814/aopalliance-1.0-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/aopalliance/aopalliance/1.0/jar/235ba8b489512805ac13a8f9ea77a1ca5ebe3e8/aopalliance-1.0.jar" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.resource/connector-api/1.5/source/a8f177930b0abd2422c6b9601c756d8c48278add/connector-api-1.5-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.resource/connector-api/1.5/jar/a5cee35dc703a9d9ea305cc3f4a2baa7c4919145/connector-api-1.5.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1/source/1068f7bb97afc27b92be277a8c1a2c25e9a1196d/geronimo-jta_1.1_spec-1.1-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1/jar/fe8d9046737540d728e4b82cf26dcdd8bf4b0eb1/geronimo-jta_1.1_spec-1.1.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.ejb/ejb-api/3.0/source/c4a90ff2371380520a3ca6f9f1c714f21b4a0ebb/ejb-api-3.0-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.ejb/ejb-api/3.0/jar/d4855ba9a1ecd993b751880567ec06ffcbd6fe06/ejb-api-3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/com.ibm.websphere/uow/6.0.2.17/jar/df754f8fe0c9c6f837d00ddcc12632fef16ec239/uow-6.0.2.17.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/junit/junit/4.11/source/28e0ad201304e4a4abf999ca0570b7cffc352c3c/junit-4.11-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/junit/junit/4.11/jar/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-all/1.3/source/47e033b7ab18c5dbd5fe29fc1bd5a40afe028818/hamcrest-all-1.3-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-all/1.3/jar/63a21ebc981131004ad02e0434e799fd7f3a8d5a/hamcrest-all-1.3.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.mockito/mockito-core/1.9.5/source/46f703fb4266140c544d48a189cb25947eb6333e/mockito-core-1.9.5-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.mockito/mockito-core/1.9.5/jar/c3264abeea62c4d2f367e21484fbb40c7e256393/mockito-core-1.9.5.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.persistence/persistence-api/1.0/source/2773a7910e8f0c7d59749dc4fcef2a4b94fcf85a/persistence-api-1.0-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.persistence/persistence-api/1.0/jar/5725f57873e05e068803e2bf9d5a8ea3740ffec5/persistence-api-1.0.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.aspectj/aspectjweaver/1.7.2/source/56ab34b488e1c1f67b95c1980839ed643963b34b/aspectjweaver-1.7.2-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.aspectj/aspectjweaver/1.7.2/jar/d3b191a99d2c34dfd5311ef3110f096f5bc0a10e/aspectjweaver-1.7.2.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-core/1.3/source/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-core/1.3/jar/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.objenesis/objenesis/1.0/source/b10c90e57b7bb985a7b6a704769428fe5c2a732c/objenesis-1.0-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.objenesis/objenesis/1.0/jar/9b473564e792c2bdf1449da1f0b1b5bff9805704/objenesis-1.0.jar"/>
+	<classpathentry kind="src" path="/spring-expression" exported="true"/>
+	<classpathentry kind="src" path="/spring-instrument" exported="true"/>
+</classpath>

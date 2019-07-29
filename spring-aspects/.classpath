@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="output" path="spring-aspects/bin/eclipse"/>
+	<classpathentry output="bin/main" kind="src" path="src/main/java"/>
+	<classpathentry output="bin/main" kind="src" path="src/main/resources"/>
+	<classpathentry output="bin/test" kind="src" path="src/test/java"/>
+	<classpathentry output="bin/test" kind="src" path="src/test/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry kind="src" path="/spring-core" exported="true"/>
+	<classpathentry kind="src" path="/spring-test" exported="true"/>
+	<classpathentry kind="src" path="/spring-context-support" exported="true"/>
+	<classpathentry kind="src" path="/spring-beans" exported="true"/>
+	<classpathentry kind="src" path="/spring-aop" exported="true"/>
+	<classpathentry kind="src" path="/spring-context" exported="true"/>
+	<classpathentry kind="src" path="/spring-tx" exported="true"/>
+	<classpathentry kind="src" path="/spring-orm" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.aspectj/aspectjweaver/1.7.2/source/56ab34b488e1c1f67b95c1980839ed643963b34b/aspectjweaver-1.7.2-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.aspectj/aspectjweaver/1.7.2/jar/d3b191a99d2c34dfd5311ef3110f096f5bc0a10e/aspectjweaver-1.7.2.jar" exported="true"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.persistence/persistence-api/1.0/source/2773a7910e8f0c7d59749dc4fcef2a4b94fcf85a/persistence-api-1.0-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.persistence/persistence-api/1.0/jar/5725f57873e05e068803e2bf9d5a8ea3740ffec5/persistence-api-1.0.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/junit/junit/4.11/source/28e0ad201304e4a4abf999ca0570b7cffc352c3c/junit-4.11-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/junit/junit/4.11/jar/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-all/1.3/source/47e033b7ab18c5dbd5fe29fc1bd5a40afe028818/hamcrest-all-1.3-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-all/1.3/jar/63a21ebc981131004ad02e0434e799fd7f3a8d5a/hamcrest-all-1.3.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.mockito/mockito-core/1.9.5/source/46f703fb4266140c544d48a189cb25947eb6333e/mockito-core-1.9.5-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.mockito/mockito-core/1.9.5/jar/c3264abeea62c4d2f367e21484fbb40c7e256393/mockito-core-1.9.5.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.mail/mail/1.4/source/fdd508f19a5075196138c94b341120e917c10e8a/mail-1.4-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.mail/mail/1.4/jar/1aa1579ae5ecd41920c4f355b0a9ef40b68315dd/mail-1.4.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-core/1.3/source/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.hamcrest/hamcrest-core/1.3/jar/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.objenesis/objenesis/1.0/source/b10c90e57b7bb985a7b6a704769428fe5c2a732c/objenesis-1.0-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/org.objenesis/objenesis/1.0/jar/9b473564e792c2bdf1449da1f0b1b5bff9805704/objenesis-1.0.jar"/>
+	<classpathentry sourcepath="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.activation/activation/1.1/source/3697e9f67a2ed7ac5f589cff30f21173299440/activation-1.1-sources.jar" kind="lib" path="C:/Users/Tanyongde/.gradle/caches/artifacts-24/filestore/javax.activation/activation/1.1/jar/e6cb541461c2834bdea3eb920f1884d1eb508b50/activation-1.1.jar"/>
+	<classpathentry kind="src" path="/spring-expression" exported="true"/>
+	<classpathentry kind="src" path="/spring-instrument" exported="true"/>
+	<classpathentry kind="src" path="/spring-jdbc" exported="true"/>
+	<classpathentry kind="src" path="/spring-web" exported="true"/>
+	<classpathentry kind="src" path="/spring-oxm" exported="true"/>
+	<classpathentry kind="src" path="/spring-webmvc" exported="true"/>
+	<classpathentry kind="src" path="/spring-webmvc-portlet" exported="true"/>
+</classpath>

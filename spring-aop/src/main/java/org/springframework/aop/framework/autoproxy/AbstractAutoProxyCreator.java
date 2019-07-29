@@ -317,7 +317,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyConfig
 	 */
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if (bean != null) {
+			//根据给定的bean的class和bean的name，构建出class的名称_beanName的key出来
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
+			//如果早期代理引用缓存中还没有该key的bean，就开始尝试代理下它
 			if (!this.earlyProxyReferences.containsKey(cacheKey)) {
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}
@@ -344,21 +346,27 @@ public abstract class AbstractAutoProxyCreator extends ProxyConfig
 	 * @return a proxy wrapping the bean, or the raw bean instance as-is
 	 */
 	protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
+		//如果已经处理过，直接返回bean
 		if (beanName != null && this.targetSourcedBeans.containsKey(beanName)) {
 			return bean;
 		}
+		//如果不需要增强，直接返回bean
 		if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
 			return bean;
 		}
+		//如果给定的bean类是代表一个基础设施类、或者配置了该bean不允许被代理，则直接返回bean
 		if (isInfrastructureClass(bean.getClass()) || shouldSkip(bean.getClass(), beanName)) {
 			this.advisedBeans.put(cacheKey, Boolean.FALSE);
 			return bean;
 		}
 
 		// Create proxy if we have advice.
+		//如果存在增强方法则创建代理
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
+		//如果获取到了增强，则需要针对增强创建代理
 		if (specificInterceptors != DO_NOT_PROXY) {
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
+			//创建代理
 			Object proxy = createProxy(bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
 			this.proxyTypes.put(cacheKey, proxy.getClass());
 			return proxy;
@@ -450,25 +458,28 @@ public abstract class AbstractAutoProxyCreator extends ProxyConfig
 
 		ProxyFactory proxyFactory = new ProxyFactory();
 		// Copy our properties (proxyTargetClass etc) inherited from ProxyConfig.
+		//将当前类中的一些属性封装到proxyFactory中
 		proxyFactory.copyFrom(this);
-
+		//是否应该使用目标代理类即使用目标类而不使用接口创建代理，也就是使用CGLIB方式创建代理
 		if (!shouldProxyTargetClass(beanClass, beanName)) {
 			// Must allow for introductions; can't just set interfaces to
 			// the target's interfaces only.
+			//如果不应该使用目标类，这里获取被代理类的接口，并封装到代理工厂中
 			Class<?>[] targetInterfaces = ClassUtils.getAllInterfacesForClass(beanClass, this.proxyClassLoader);
 			for (Class<?> targetInterface : targetInterfaces) {
 				proxyFactory.addInterface(targetInterface);
 			}
 		}
-
+		//将一些拦截器、增强器封装成增强，因为增强来源挺多的有必要分装成统一的增强
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		for (Advisor advisor : advisors) {
 			proxyFactory.addAdvisor(advisor);
 		}
-
+		//设置被代理的类
 		proxyFactory.setTargetSource(targetSource);
+		//留给子类定制代理，模板方法设计模式
 		customizeProxyFactory(proxyFactory);
-
+		//默认为false，即代理配置之后就不允许被修改了
 		proxyFactory.setFrozen(this.freezeProxy);
 		if (advisorsPreFiltered()) {
 			proxyFactory.setPreFiltered(true);
@@ -518,12 +529,15 @@ public abstract class AbstractAutoProxyCreator extends ProxyConfig
 	 */
 	protected Advisor[] buildAdvisors(String beanName, Object[] specificInterceptors) {
 		// Handle prototypes correctly...
+		//解析注册的所有Interceptor的name
 		Advisor[] commonInterceptors = resolveInterceptorNames();
 
 		List<Object> allInterceptors = new ArrayList<Object>();
 		if (specificInterceptors != null) {
+			//首先添加我们已经得到所有拦截器
 			allInterceptors.addAll(Arrays.asList(specificInterceptors));
 			if (commonInterceptors != null) {
+				//根据applyCommonInterceptorsFirst参数来决定注册的拦截器放置的顺序
 				if (this.applyCommonInterceptorsFirst) {
 					allInterceptors.addAll(0, Arrays.asList(commonInterceptors));
 				}
@@ -541,6 +555,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyConfig
 
 		Advisor[] advisors = new Advisor[allInterceptors.size()];
 		for (int i = 0; i < allInterceptors.size(); i++) {
+			//将拦截器封装并转换为Advisor
 			advisors[i] = this.advisorAdapterRegistry.wrap(allInterceptors.get(i));
 		}
 		return advisors;
