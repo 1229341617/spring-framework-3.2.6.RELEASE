@@ -83,15 +83,18 @@ public class SingleColumnRowMapper<T> implements RowMapper<T> {
 		// Validate column count.
 		ResultSetMetaData rsmd = rs.getMetaData();
 		int nrOfColumns = rsmd.getColumnCount();
+		//如果结果集中的列数不为1，报异常
 		if (nrOfColumns != 1) {
 			throw new IncorrectResultSetColumnCountException(1, nrOfColumns);
 		}
 
 		// Extract column value from JDBC ResultSet.
+		//只取结果集中的第一行的数据
 		Object result = getColumnValue(rs, 1, this.requiredType);
 		if (result != null && this.requiredType != null && !this.requiredType.isInstance(result)) {
 			// Extracted value does not match already: try to convert it.
 			try {
+				//将数据转换为我们想要的类型并返回
 				return (T) convertValueToRequiredType(result, this.requiredType);
 			}
 			catch (IllegalArgumentException ex) {

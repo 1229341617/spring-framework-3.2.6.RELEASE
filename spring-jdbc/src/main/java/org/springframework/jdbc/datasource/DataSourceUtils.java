@@ -80,25 +80,15 @@ public abstract class DataSourceUtils {
 			throw new CannotGetJdbcConnectionException("Could not get JDBC Connection", ex);
 		}
 	}
-
-	/**
-	 * Actually obtain a JDBC Connection from the given DataSource.
-	 * Same as {@link #getConnection}, but throwing the original SQLException.
-	 * <p>Is aware of a corresponding Connection bound to the current thread, for example
-	 * when using {@link DataSourceTransactionManager}. Will bind a Connection to the thread
-	 * if transaction synchronization is active (e.g. if in a JTA transaction).
-	 * <p>Directly accessed by {@link TransactionAwareDataSourceProxy}.
-	 * @param dataSource the DataSource to obtain Connections from
-	 * @return a JDBC Connection from the given DataSource
-	 * @throws SQLException if thrown by JDBC methods
-	 * @see #doReleaseConnection
-	 */
 	public static Connection doGetConnection(DataSource dataSource) throws SQLException {
 		Assert.notNull(dataSource, "No DataSource specified");
-
+		//从事务同步管理器中获取数据库连接的持有者
 		ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
 		if (conHolder != null && (conHolder.hasConnection() || conHolder.isSynchronizedWithTransaction())) {
+			//让ConnectionHolder的引用数加1，因为每次只有通过DataSource获取conn的操作
+			//时，ConnectionHolder的引用数都会加1,如下实际为：this.referenceCount++
 			conHolder.requested();
+			//如果当前数据库连接持有者无数据库连接，那么从datasource中获取一个并保存在conHolder中
 			if (!conHolder.hasConnection()) {
 				logger.debug("Fetching resumed JDBC Connection from DataSource");
 				conHolder.setConnection(dataSource.getConnection());
@@ -109,11 +99,12 @@ public abstract class DataSourceUtils {
 
 		logger.debug("Fetching JDBC Connection from DataSource");
 		Connection con = dataSource.getConnection();
-
+		//如果当前线程支持同步
 		if (TransactionSynchronizationManager.isSynchronizationActive()) {
 			logger.debug("Registering transaction synchronization for JDBC Connection");
 			// Use same Connection for further JDBC actions within the transaction.
 			// Thread-bound object will get removed by synchronization at transaction completion.
+			//在事务中使用同一数据库连接
 			ConnectionHolder holderToUse = conHolder;
 			if (holderToUse == null) {
 				holderToUse = new ConnectionHolder(con);
@@ -121,9 +112,11 @@ public abstract class DataSourceUtils {
 			else {
 				holderToUse.setConnection(con);
 			}
+			//此处数据库连接被引用也加1
 			holderToUse.requested();
 			TransactionSynchronizationManager.registerSynchronization(
 					new ConnectionSynchronization(holderToUse, dataSource));
+			//既然当前连接是支持事务的，设置下支持的标识
 			holderToUse.setSynchronizedWithTransaction(true);
 			if (holderToUse != conHolder) {
 				TransactionSynchronizationManager.bindResource(dataSource, holderToUse);
@@ -301,17 +294,8 @@ public abstract class DataSourceUtils {
 		}
 	}
 
-	/**
-	 * Actually close the given Connection, obtained from the given DataSource.
-	 * Same as {@link #releaseConnection}, but throwing the original SQLException.
-	 * <p>Directly accessed by {@link TransactionAwareDataSourceProxy}.
-	 * @param con the Connection to close if necessary
-	 * (if this is {@code null}, the call will be ignored)
-	 * @param dataSource the DataSource that the Connection was obtained from
-	 * (may be {@code null})
-	 * @throws SQLException if thrown by JDBC methods
-	 * @see #doGetConnection
-	 */
+	//如果当前线程存在事务的情况下，只会将ConnectionHolder中的引用计数
+	//器减一而不是释放，如果不支持事务则直接调用close函数关闭数据库连接
 	public static void doReleaseConnection(Connection con, DataSource dataSource) throws SQLException {
 		if (con == null) {
 			return;

@@ -87,11 +87,16 @@ public class LoadTimeWeaverAwareProcessor implements BeanPostProcessor, BeanFact
 
 
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		//bean是否是LoadTimeWeaverAware的实例
+		//实际上LoadTimeWeaverAware只有一个实现类，那就是AspectJWeavingEnabler,所
+		//以该处理器只对AspectJWeavingEnabler做处理
 		if (bean instanceof LoadTimeWeaverAware) {
 			LoadTimeWeaver ltw = this.loadTimeWeaver;
 			if (ltw == null) {
 				Assert.state(this.beanFactory != null,
 						"BeanFactory required if no LoadTimeWeaver explicitly specified");
+				//LOAD_TIME_WEAVER_BEAN_NAME="loadTimeWeaver"，就是获取DefaultContextLoadTimeWeaver或者
+				//是标签<context:load-time-weaver/>中weaver-class属性指定的类的实例
 				ltw = this.beanFactory.getBean(
 						ConfigurableApplicationContext.LOAD_TIME_WEAVER_BEAN_NAME, LoadTimeWeaver.class);
 			}

@@ -53,6 +53,7 @@ public class ArgumentTypePreparedStatementSetter implements PreparedStatementSet
 
 
 	public void setValues(PreparedStatement ps) throws SQLException {
+		//记录参数占位符的顺序，如下代码所示，每设置完一个参数的值后都会自增1，这里也证明了第一个参数占位符是从1开始的
 		int parameterPosition = 1;
 		if (this.args != null) {
 			for (int i = 0; i < this.args.length; i++) {

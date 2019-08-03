@@ -77,8 +77,6 @@ public abstract class TransactionSynchronizationManager {
 
 	private static final Log logger = LogFactory.getLog(TransactionSynchronizationManager.class);
 
-	private static final ThreadLocal<Map<Object, Object>> resources =
-			new NamedThreadLocal<Map<Object, Object>>("Transactional resources");
 
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =
 			new NamedThreadLocal<Set<TransactionSynchronization>>("Transaction synchronizations");
@@ -126,15 +124,13 @@ public abstract class TransactionSynchronizationManager {
 		return (value != null);
 	}
 
-	/**
-	 * Retrieve a resource for the given key that is bound to the current thread.
-	 * @param key the key to check (usually the resource factory)
-	 * @return a value bound to the current thread (usually the active
-	 * resource object), or {@code null} if none
-	 * @see ResourceTransactionManager#getResourceFactory()
-	 */
+	private static final ThreadLocal<Map<Object, Object>> resources =
+			new NamedThreadLocal<Map<Object, Object>>("Transactional resources");
+	
 	public static Object getResource(Object key) {
+		//将DataSource类型的参数封装成key
 		Object actualKey = TransactionSynchronizationUtils.unwrapResourceIfNecessary(key);
+		//通过key获取到数据库连接持有者ConnectionHolder
 		Object value = doGetResource(actualKey);
 		if (value != null && logger.isTraceEnabled()) {
 			logger.trace("Retrieved value [" + value + "] for key [" + actualKey + "] bound to thread [" +
@@ -142,10 +138,7 @@ public abstract class TransactionSynchronizationManager {
 		}
 		return value;
 	}
-
-	/**
-	 * Actually check the value of the resource that is bound for the given key.
-	 */
+	//获取到ThreadLocal中的map中的ConnectionHolder类型的value值
 	private static Object doGetResource(Object actualKey) {
 		Map<Object, Object> map = resources.get();
 		if (map == null) {
@@ -177,9 +170,12 @@ public abstract class TransactionSynchronizationManager {
 		Map<Object, Object> map = resources.get();
 		// set ThreadLocal Map if none found
 		if (map == null) {
+			//如果是第一次获取数据库连接，则创建map
 			map = new HashMap<Object, Object>();
 			resources.set(map);
 		}
+		//以DataSource为key，以ConnectionHolder为value封装到map中，map
+		//当前已经设置到ThreadLocal中了
 		Object oldValue = map.put(actualKey, value);
 		// Transparently suppress a ResourceHolder that was marked as void...
 		if (oldValue instanceof ResourceHolder && ((ResourceHolder) oldValue).isVoid()) {

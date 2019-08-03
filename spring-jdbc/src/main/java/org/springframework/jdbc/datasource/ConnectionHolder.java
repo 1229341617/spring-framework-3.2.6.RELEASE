@@ -126,10 +126,13 @@ public class ConnectionHolder extends ResourceHolderSupport {
 	 * argument) and setting a fresh Connection on resume.
 	 */
 	protected void setConnection(Connection connection) {
+		//如果当前数据库连接的实例不为空，就释放掉它，并指向null
 		if (this.currentConnection != null) {
 			this.connectionHandle.releaseConnection(this.currentConnection);
 			this.currentConnection = null;
 		}
+		//如果当前参数中的数据库连接不为空，则利用它封装成SimpleConnectionHandle，通
+		//过它是可以获取到数据库连接的,否则连接的处理器设置为null
 		if (connection != null) {
 			this.connectionHandle = new SimpleConnectionHandle(connection);
 		}
