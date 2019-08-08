@@ -252,6 +252,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	public Set<BeanDefinition> findCandidateComponents(String basePackage) {
 		Set<BeanDefinition> candidates = new LinkedHashSet<BeanDefinition>();
 		try {
+			//这里在classpath路径下，将包名改为路径获取所有的资源
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + "/" + this.resourcePattern;
 			Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
@@ -263,7 +264,10 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
+						//然后将得到的mapper接口Resource封装成ScannedGenericBeanDefinition
+						//对象中的两个成员变量resource和source
 						MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
+						//这里开始使用过滤器对各个mapper资源进行过滤处理
 						if (isCandidateComponent(metadataReader)) {
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setResource(resource);

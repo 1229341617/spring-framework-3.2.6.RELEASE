@@ -41,10 +41,12 @@ public abstract class DaoSupport implements InitializingBean {
 
 	public final void afterPropertiesSet() throws IllegalArgumentException, BeanInitializationException {
 		// Let abstract subclasses check their configuration.
+		//检查Dao的配置
 		checkDaoConfig();
 
 		// Let concrete implementations initialize themselves.
 		try {
+			//留给子类复写，模板方法设计模式的应用
 			initDao();
 		}
 		catch (Exception ex) {
