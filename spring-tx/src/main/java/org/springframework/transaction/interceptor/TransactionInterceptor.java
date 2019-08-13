@@ -88,10 +88,15 @@ public class TransactionInterceptor extends TransactionAspectSupport implements 
 		// Work out the target class: may be {@code null}.
 		// The TransactionAttributeSource should be passed the target class
 		// as well as the method, which may be from an interface.
+		//如果当前方法执行对象中的加入点不为空，获取Joinpoint对应的目标类
+		//MethodInvocation父类Joinpoint中的getThis就是获取到了当前被代理的实现类了，只不过还需要考虑是否实现了TargetClassAware，如
+		//果实现了直接通过感知接口中的方法获取class，如果没有实现，还需要判断是否是CGLIB代理类，是的话要获取其父类
 		Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
 
 		// Adapt to TransactionAspectSupport's invokeWithinTransaction...
+		//在当前事务中执行方法，并返回结果
 		return invokeWithinTransaction(invocation.getMethod(), targetClass, new InvocationCallback() {
+			//执行回调方法中，Joinpoint中的proceed方法执行
 			public Object proceedWithInvocation() throws Throwable {
 				return invocation.proceed();
 			}

@@ -84,6 +84,8 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 		// First, see if we have a cached value.
 		Object cacheKey = getCacheKey(method, targetClass);
 		Object cached = this.attributeCache.get(cacheKey);
+		//这里走下缓存，因为总不可能每次匹配都要进行一次事务属性的获取吧，而应该是在第一次匹配时，就将
+		//事务属性获取到并缓存，之后每次只需要从缓存取就行了
 		if (cached != null) {
 			// Value will either be canonical value indicating there is no transaction attribute,
 			// or an actual transaction attribute.
@@ -96,6 +98,7 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 		}
 		else {
 			// We need to work it out.
+			//真正开始获取事务属性的入口
 			TransactionAttribute txAtt = computeTransactionAttribute(method, targetClass);
 			// Put it in the cache.
 			if (txAtt == null) {
@@ -130,19 +133,17 @@ public abstract class AbstractFallbackTransactionAttributeSource implements Tran
 	 */
 	private TransactionAttribute computeTransactionAttribute(Method method, Class<?> targetClass) {
 		// Don't allow no-public methods as required.
+		//如果设置了只解析public修饰的方法或类，但是现实方法或类又不是public修饰的，此时返回事务属性为空
 		if (allowPublicMethodsOnly() && !Modifier.isPublic(method.getModifiers())) {
 			return null;
 		}
-
-		// Ignore CGLIB subclasses - introspect the actual user class.
+		//如果目标实现类时CGLIB代理类，即$$开头的，那就获取它的父类
 		Class<?> userClass = ClassUtils.getUserClass(targetClass);
-		// The method may be on an interface, but we need attributes from the target class.
-		// If the target class is null, the method will be unchanged.
+		//通过接口方法信息method，加上实现类targetClass，获取到实现类的方法specificMethod，然后才可能进行如下四种顺序的寻找
 		Method specificMethod = ClassUtils.getMostSpecificMethod(method, userClass);
 		// If we are dealing with method with generic parameters, find the original method.
 		specificMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
-
-		// First try is the method in the target class.
+		//以下就是寻找的顺序了，分别是实现类方法->实现类->接口方法->接口类
 		TransactionAttribute txAtt = findTransactionAttribute(specificMethod);
 		if (txAtt != null) {
 			return txAtt;

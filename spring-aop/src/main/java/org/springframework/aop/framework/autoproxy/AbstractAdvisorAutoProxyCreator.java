@@ -75,16 +75,6 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 		return advisors.toArray();
 	}
 
-	/**
-	 * Find all eligible Advisors for auto-proxying this class.
-	 * @param beanClass the clazz to find advisors for
-	 * @param beanName the name of the currently proxied bean
-	 * @return the empty List, not {@code null},
-	 * if there are no pointcuts or interceptors
-	 * @see #findCandidateAdvisors
-	 * @see #sortAdvisors
-	 * @see #extendAdvisors
-	 */
 	protected List<Advisor> findEligibleAdvisors(Class beanClass, String beanName) {
 		//找到所有候选的增强
 		List<Advisor> candidateAdvisors = findCandidateAdvisors();

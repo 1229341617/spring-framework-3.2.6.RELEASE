@@ -66,10 +66,15 @@ public class BeanFactoryAdvisorRetrievalHelper {
 		// Determine list of advisor bean names, if not cached already.
 		String[] advisorNames = null;
 		synchronized (this) {
+			//先从缓存中寻找是否含有所有增强器对应beanname
 			advisorNames = this.cachedAdvisorBeanNames;
+			//如果没有就重新寻找
 			if (advisorNames == null) {
 				// Do not initialize FactoryBeans here: We need to leave all regular beans
 				// uninitialized to let the auto-proxy creator apply to them!
+				//这里不需要初始化工厂bean，我们需要找到没有初始化的所有bean，然后让自动代理创建器去应用它们
+				//这里其实也是通过getBeanNamesForType，根据bean的类型获取所有Advisor.class类型的增强Bean名称
+				//这里也会将BeanFactoryTransactionAttributeAdvisor给一起找出来，因为它也是实现了Advisor接口的
 				advisorNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 						this.beanFactory, Advisor.class, true, false);
 				this.cachedAdvisorBeanNames = advisorNames;
@@ -80,8 +85,11 @@ public class BeanFactoryAdvisorRetrievalHelper {
 		}
 
 		List<Advisor> advisors = new LinkedList<Advisor>();
+		//遍历得到所有增强的beanName，找到对应的bean并添加到增强集合中
 		for (String name : advisorNames) {
+			//默认返回true，子类可以覆写该方法定义是否合格的标准
 			if (isEligibleBean(name)) {
+				//如果当前的beanName对应的bean还正在实例化当中，当然就不能得到它了
 				if (this.beanFactory.isCurrentlyInCreation(name)) {
 					if (logger.isDebugEnabled()) {
 						logger.debug("Skipping currently created advisor '" + name + "'");
@@ -89,6 +97,7 @@ public class BeanFactoryAdvisorRetrievalHelper {
 				}
 				else {
 					try {
+						//已经知道了代理类的beanName，得到对应的bean就很简单了，调用方法getBean(String,Class<?> requiredType)方法即可
 						advisors.add(this.beanFactory.getBean(name, Advisor.class));
 					}
 					catch (BeanCreationException ex) {

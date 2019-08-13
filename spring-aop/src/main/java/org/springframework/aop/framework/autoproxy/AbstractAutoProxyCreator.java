@@ -319,7 +319,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyConfig
 		if (bean != null) {
 			//根据给定的bean的class和bean的name，构建出class的名称_beanName的key出来
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
-			//如果早期代理引用缓存中还没有该key的bean，就开始尝试代理下它
+			//是否由于避免循环依赖，而造就已经创建了当前bean的代理
 			if (!this.earlyProxyReferences.containsKey(cacheKey)) {
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}
@@ -361,12 +361,12 @@ public abstract class AbstractAutoProxyCreator extends ProxyConfig
 		}
 
 		// Create proxy if we have advice.
-		//如果存在增强方法则创建代理
+		//1.获取当前bean对应的所有增强
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		//如果获取到了增强，则需要针对增强创建代理
 		if (specificInterceptors != DO_NOT_PROXY) {
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
-			//创建代理
+			//2.根据获取到的增强创建代理
 			Object proxy = createProxy(bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
 			this.proxyTypes.put(cacheKey, proxy.getClass());
 			return proxy;

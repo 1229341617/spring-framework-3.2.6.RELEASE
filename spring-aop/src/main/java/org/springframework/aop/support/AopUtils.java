@@ -34,6 +34,7 @@ import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.SpringProxy;
 import org.springframework.aop.TargetClassAware;
 import org.springframework.core.BridgeMethodResolver;
+import org.springframework.transaction.interceptor.TransactionAttributeSourcePointcut;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
@@ -208,13 +209,14 @@ public abstract class AopUtils {
 		if (!pc.getClassFilter().matches(targetClass)) {
 			return false;
 		}
-
+		//这里的pc为BeanFactoryTransactionAttributeSourceAdvisor中的TransactionAttributeSourcePointcut成员变量
+		//获取事务属性源切点中的方法匹配器MethodMatcher，调用的方法matches其实也是事务属性源切点中的方法
 		MethodMatcher methodMatcher = pc.getMethodMatcher();
 		IntroductionAwareMethodMatcher introductionAwareMethodMatcher = null;
 		if (methodMatcher instanceof IntroductionAwareMethodMatcher) {
 			introductionAwareMethodMatcher = (IntroductionAwareMethodMatcher) methodMatcher;
 		}
-
+		//这里获取目标类和目标类接口，并依次遍历它们当中每一个方法，如果方法匹配器和目标类或者目标类接口中的任何一个方法匹配成功，就表明当前的增强合格了
 		Set<Class> classes = new HashSet<Class>(ClassUtils.getAllInterfacesForClassAsSet(targetClass));
 		classes.add(targetClass);
 		for (Class<?> clazz : classes) {
@@ -223,6 +225,7 @@ public abstract class AopUtils {
 				if ((introductionAwareMethodMatcher != null &&
 						introductionAwareMethodMatcher.matches(method, targetClass, hasIntroductions)) ||
 						methodMatcher.matches(method, targetClass)) {
+					//但是这里有一个悬念就是，如果事务配置在接口级别上，这是会对整个接口中的方法产生影响的，难道它会绕过类级别的判断吗，此时有必要到方法匹配的内部逻辑去一探究竟了
 					return true;
 				}
 			}
@@ -257,8 +260,13 @@ public abstract class AopUtils {
 		if (advisor instanceof IntroductionAdvisor) {
 			return ((IntroductionAdvisor) advisor).getClassFilter().matches(targetClass);
 		}
+		//因为当前分析的是当前代理是否适用于TxUserService，所以当前增强advisor就是BeanFactoryTransactionAttributeSourceAdvisor
+		//，而我们看该名称就可以猜到它实现了Advisor类，实际上它实现了切点增强接口PointcutAdvisor，然后切点增强接口实现增强接口Advisor
 		else if (advisor instanceof PointcutAdvisor) {
 			PointcutAdvisor pca = (PointcutAdvisor) advisor;
+			//这里的advisor为BeanFactoryTransactionAttributeSourceAdvisor,获取它内部的成员变量
+			//事务属性源切点TransactionAttributeSourcePointcut，用它来对目标类和目标类接口方法级别的判定，
+			//因为它内部封装了注解事务属性源，可以对方法级别或者类级别上的@Transactional进行事务属性解析
 			return canApply(pca.getPointcut(), targetClass, hasIntroductions);
 		}
 		else {

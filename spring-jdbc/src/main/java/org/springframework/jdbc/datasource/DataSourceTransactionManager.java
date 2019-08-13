@@ -176,14 +176,18 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	@Override
 	protected Object doGetTransaction() {
 		DataSourceTransactionObject txObject = new DataSourceTransactionObject();
+		//这里会判断，只有设置了允许嵌套事务，才会首选设置保存点的方式来处理异常事务的回滚
 		txObject.setSavepointAllowed(isNestedTransactionAllowed());
+		//这里只是简单的获取数据库连接持有者，并设置到新创建的事务对象中，conHolder是否有值后续还需要再判断处理的
 		ConnectionHolder conHolder =
 			(ConnectionHolder) TransactionSynchronizationManager.getResource(this.dataSource);
+		//这里false是设置不是第一次获取数据库连接
 		txObject.setConnectionHolder(conHolder, false);
 		return txObject;
 	}
 
 	@Override
+	//如果从当前线程中获取的ConnectionHoder不为空，并且其中的事务状态为活跃的，就表明有事务，需要处理已经存在的事务
 	protected boolean isExistingTransaction(Object transaction) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
 		return (txObject.getConnectionHolder() != null && txObject.getConnectionHolder().isTransactionActive());
@@ -198,24 +202,28 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		Connection con = null;
 
 		try {
+			//如果第一次从事务同步管理器中、通过dataSource得到的数据库连接持有者是空的
+			//或者连接持有者是事务同步的，此时需要重新创建数据库连接持有者
 			if (txObject.getConnectionHolder() == null ||
 					txObject.getConnectionHolder().isSynchronizedWithTransaction()) {
 				Connection newCon = this.dataSource.getConnection();
 				if (logger.isDebugEnabled()) {
 					logger.debug("Acquired Connection [" + newCon + "] for JDBC transaction");
 				}
+				//并设置上是第一次创建的标识，并在后续和dataSource绑定起来
 				txObject.setConnectionHolder(new ConnectionHolder(newCon), true);
 			}
 
 			txObject.getConnectionHolder().setSynchronizedWithTransaction(true);
 			con = txObject.getConnectionHolder().getConnection();
-
+			//根据TransactionDefinition中的信息，设置数据库连接的只读属性和事务隔离级别，并且将数据库连接之前的事务隔离级别返回
 			Integer previousIsolationLevel = DataSourceUtils.prepareConnectionForTransaction(con, definition);
 			txObject.setPreviousIsolationLevel(previousIsolationLevel);
 
 			// Switch to manual commit if necessary. This is very expensive in some JDBC drivers,
 			// so we don't want to do it unnecessarily (for example if we've explicitly
 			// configured the connection pool to set it already).
+			//如果数据库连接之前就是设置的自动提交，此时为了让Spring控制它的提交时机，需要修改为不自动提交
 			if (con.getAutoCommit()) {
 				txObject.setMustRestoreAutoCommit(true);
 				if (logger.isDebugEnabled()) {
@@ -224,13 +232,14 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				con.setAutoCommit(false);
 			}
 			txObject.getConnectionHolder().setTransactionActive(true);
-
+			//根据TransactionDefinition中的信息，设置过期超时时间
 			int timeout = determineTimeout(definition);
 			if (timeout != TransactionDefinition.TIMEOUT_DEFAULT) {
 				txObject.getConnectionHolder().setTimeoutInSeconds(timeout);
 			}
 
 			// Bind the session holder to the thread.
+			//如果当前的数据库连接持有者是新创建出来的，需要和dataSource绑定在一起
 			if (txObject.isNewConnectionHolder()) {
 				TransactionSynchronizationManager.bindResource(getDataSource(), txObject.getConnectionHolder());
 			}
@@ -303,15 +312,18 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 
 		// Remove the connection holder from the thread, if exposed.
 		if (txObject.isNewConnectionHolder()) {
+			//如果是新事物，将数据库连接和当前事务中解绑，remove这个dataSource的key
 			TransactionSynchronizationManager.unbindResource(this.dataSource);
 		}
 
 		// Reset connection.
 		Connection con = txObject.getConnectionHolder().getConnection();
 		try {
+			//将之前创建时事务信息时，设置了数据库连接自动提交，设回为true
 			if (txObject.isMustRestoreAutoCommit()) {
 				con.setAutoCommit(true);
 			}
+			//将之前数据库连接设置的事务隔离级别以及readOnly都恢复到之前的状态
 			DataSourceUtils.resetConnectionAfterTransaction(con, txObject.getPreviousIsolationLevel());
 		}
 		catch (Throwable ex) {
@@ -322,9 +334,10 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 			if (logger.isDebugEnabled()) {
 				logger.debug("Releasing JDBC Connection [" + con + "] after transaction");
 			}
+			//释放数据库连接，如果是从ConnectionHolder中获取的数据库连接，则内部引用自增器减一即可，如果不是就直接close释放掉
 			DataSourceUtils.releaseConnection(con, this.dataSource);
 		}
-
+		
 		txObject.getConnectionHolder().clear();
 	}
 

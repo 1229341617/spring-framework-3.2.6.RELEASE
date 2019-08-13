@@ -371,6 +371,7 @@ public abstract class ClassUtils {
 	 * @return the user-defined class
 	 */
 	public static Class<?> getUserClass(Class<?> clazz) {
+		//如果当前clazz类名是以$$开头的，即是CGLIB代理类，此时获取被代理类的class并返回
 		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
 			Class<?> superClass = clazz.getSuperclass();
 			if (superClass != null && !Object.class.equals(superClass)) {
@@ -774,11 +775,15 @@ public abstract class ClassUtils {
 	 * {@code targetClass} doesn't implement it or is {@code null}
 	 */
 	public static Method getMostSpecificMethod(Method method, Class<?> targetClass) {
+		//如果方法不为空且是可以被覆盖的(private为false，public、protected为true)
+		//目标类不为空，且当前方法时来自接口的而不是来自实现类的，其实就是当前的代理是JDK动态代理
+		//这时就需要通过  接口的方法method->从实现类中获取到实现类中的实现好了的方法，并返回
 		if (method != null && isOverridable(method, targetClass) &&
 				targetClass != null && !targetClass.equals(method.getDeclaringClass())) {
 			try {
 				if (Modifier.isPublic(method.getModifiers())) {
 					try {
+						//在实现类中，根据接口的方法method信息，获取实现了的方法对象
 						return targetClass.getMethod(method.getName(), method.getParameterTypes());
 					}
 					catch (NoSuchMethodException ex) {
